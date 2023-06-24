@@ -23,9 +23,7 @@ func _process(delta):
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
-	if Input.is_action_pressed("test"):
-		velocity.x += 1
-		velocity.y += 1
+
 	# Length method return the magnitude of the verctor.
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
