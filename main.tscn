@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dg2c6jea63u3l"]
+[gd_scene load_steps=7 format=3 uid="uid://dg2c6jea63u3l"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_pjn31"]
 [ext_resource type="PackedScene" uid="uid://dsmt5ye2yb812" path="res://mob.tscn" id="2_3kajv"]
 [ext_resource type="PackedScene" uid="uid://jyre4f2w266s" path="res://player.tscn" id="2_ffm03"]
+[ext_resource type="Script" path="res://HUD.gd" id="4_5g0wl"]
+[ext_resource type="FontFile" uid="uid://bwveomditputd" path="res://fonts/Xolonium-Regular.ttf" id="5_on3xi"]
 
 [sub_resource type="Curve2D" id="Curve2D_fqgy7"]
 _data = {
@@ -33,7 +35,61 @@ curve = SubResource("Curve2D_fqgy7")
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_5g0wl")
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 78.0
+grow_horizontal = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("5_on3xi")
+theme_override_font_sizes/font_size = 64
+text = "0"
+
+[node name="Message" type="Label" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Dodge The creeps"
+
+[node name="StartButton" type="Button" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -44.0
+offset_top = -140.0
+offset_right = 44.0
+offset_bottom = -85.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 34
+text = "Start"
+
+[node name="MessageTimer" type="Timer" parent="HUD"]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="pressed" from="HUD/StartButton" to="HUD" method="_on_start_button_pressed"]
+[connection signal="timeout" from="HUD/MessageTimer" to="HUD" method="_on_message_timer_timeout"]
