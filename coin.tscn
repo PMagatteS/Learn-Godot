@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://ybc03wx0chwn"]
+
+[ext_resource type="Script" path="res://coin.gd" id="1_uykqo"]
+[ext_resource type="Texture2D" uid="uid://dlyqj6mw4gs2j" path="res://art/coin1.png" id="2_73smo"]
+[ext_resource type="Texture2D" uid="uid://c2lcy2baeid2k" path="res://art/coin2.png" id="3_pvin5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n2s72"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_73smo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pvin5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jgq6h"]
+radius = 18.1108
+
+[node name="coin" type="RigidBody2D" groups=["coins"]]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_uykqo")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.6, 0.6)
+sprite_frames = SubResource("SpriteFrames_n2s72")
+frame_progress = 0.912395
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_jgq6h")
+
+[node name="DespawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]
