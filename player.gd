@@ -1,9 +1,12 @@
 extends Area2D
 signal hit
+signal coinCollected
 
 @export var speed = 400 # How fast the player will move (pixels/sec).
 var screen_size # Size of the game window.
 var frames = 0
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,16 +48,21 @@ func _process(delta):
 		
 	# Personnal addition to check some values at a resonable rate
 	if frames%60 == 0:
-		print("print something each second")
+		#print("print something each second")
+		pass
 		
 	frames+=1
 
 
 func _on_body_entered(body):
-	hide() # Player disappears after being hit.
-	hit.emit()
+	if "coin" in body.name :
+		body.queue_free()
+		coinCollected.emit()
+	else:
+		hide() # Player disappears after being hit.
+		hit.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
-	$CollisionShape2D.set_deferred("disabled", true)
+		$CollisionShape2D.set_deferred("disabled", true)
 	
 func start(pos):
 	position = pos
