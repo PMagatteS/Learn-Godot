@@ -5,6 +5,7 @@ extends Node
 @export var coin_scene: PackedScene
 
 var score
+var goldCoin
 var screenWidth = ProjectSettings.get_setting("display/window/size/viewport_width")
 var screenHeight = ProjectSettings.get_setting("display/window/size/viewport_height")
 
@@ -27,9 +28,11 @@ func new_game():
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("coins", "queue_free")	
 	score = 0
+	goldCoin = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
 	$HUD.update_score(score)
+	$HUD.update_coins(goldCoin)
 	$HUD.show_message("Get Ready")
 
 func _on_player_hit():
@@ -83,10 +86,13 @@ func _on_mob_timer_timeout():
 func _on_player_coin_collected():
 	score += 5 
 	$HUD.update_score(score)
+	goldCoin += 1
+	$HUD.update_coins(goldCoin)
 
 
 func _on_coin_timer_timeout():
 	var coin = coin_scene.instantiate()
-	coin.position = Vector2(randf_range(0.0, screenWidth), randf_range(0.0, screenHeight))
+	var radius = coin.get_node("CollisionShape2D").shape.radius
+	coin.position = Vector2(randf_range(radius, screenWidth-radius), randf_range(radius, screenHeight-radius))
 	add_child(coin)
 
