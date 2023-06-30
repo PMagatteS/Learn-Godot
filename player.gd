@@ -56,7 +56,7 @@ func _process(delta):
 
 func _on_body_entered(body):
 	if "coin" in body.name :
-		body.queue_free()
+		body.collected()
 		coinCollected.emit()
 	else:
 		hide() # Player disappears after being hit.
